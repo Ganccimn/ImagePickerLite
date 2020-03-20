@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_crop"
+        android:icon="@drawable/ic_crop_white_24dp"
+        android:title="裁剪"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/xxx"
+        android:icon="@drawable/ic_more_vert_white_24dp"
+        android:title="菜单"
+        app:showAsAction="ifRoom">
+
+        <menu>
+
+            <item
+                android:id="@+id/rotate_btn"
+                android:orderInCategory="80"
+                android:title="旋转"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/h_rotate_btn"
+                android:orderInCategory="80"
+                android:title="翻转"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/reset_btn"
+                android:orderInCategory="80"
+                android:title="重制"
+                app:showAsAction="never" />
+
+        </menu>
+
+    </item>
+
+</menu>

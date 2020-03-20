@@ -1,0 +1,3 @@
+rootProject.name='ImagePickerLite'
+include ':app'
+include ':app:imagepickerlite'
