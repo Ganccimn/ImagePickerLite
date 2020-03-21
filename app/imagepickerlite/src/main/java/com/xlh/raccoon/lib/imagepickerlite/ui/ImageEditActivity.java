@@ -21,7 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.xlh.raccoon.lib.easyasynctask.EasyAsyncTask;
 import com.xlh.raccoon.lib.easyasynctask.EasyCallback;
 import com.xlh.raccoon.lib.easyasynctask.EasyTask;
-import com.xlh.raccoon.lib.easyasynctask.EasyTaskDialog;
+import com.xlh.raccoon.lib.easyasynctask.EasyTaskProgressBar;
 import com.xlh.raccoon.lib.imagepickerlite.ImageOptions;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePickerLite;
 import com.xlh.raccoon.lib.imagepickerlite.R;
@@ -80,9 +80,9 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           }
 
           @Override
-          public void onStart(EasyTaskDialog easyTaskDialog) {
-            easyTaskDialog.setMsg("正在加载图片...");
-            easyTaskDialog.show();
+          public void onStart(EasyTaskProgressBar easyTaskProgressBar) {
+            easyTaskProgressBar.setMsg("正在加载图片...");
+            easyTaskProgressBar.show();
           }
 
           @Override
@@ -103,7 +103,12 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           }
 
           @Override
-          public void onProgressUpdate(EasyTaskDialog easyTaskDialog, String... strings) {
+          public void onFail(int i, String s, String s1) {
+
+          }
+
+          @Override
+          public void onProgressUpdate(EasyTaskProgressBar easyTaskProgressBar, String... strings) {
 
           }
         });
@@ -118,8 +123,8 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           }
 
           @Override
-          public void onStart(EasyTaskDialog easyTaskDialog) {
-            easyTaskDialog.show();
+          public void onStart(EasyTaskProgressBar easyTaskProgressBar) {
+            easyTaskProgressBar.show();
           }
 
           @Override
@@ -149,7 +154,12 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           }
 
           @Override
-          public void onProgressUpdate(EasyTaskDialog easyTaskDialog, String... strings) {
+          public void onFail(int i, String s, String s1) {
+
+          }
+
+          @Override
+          public void onProgressUpdate(EasyTaskProgressBar easyTaskProgressBar, String... strings) {
 
           }
         });
@@ -164,9 +174,9 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           }
 
           @Override
-          public void onStart(EasyTaskDialog easyTaskDialog) {
-            easyTaskDialog.setMsg("裁剪图片中...");
-            easyTaskDialog.show();
+          public void onStart(EasyTaskProgressBar easyTaskProgressBar) {
+            easyTaskProgressBar.setMsg("裁剪图片中...");
+            easyTaskProgressBar.show();
           }
 
           @Override
@@ -203,8 +213,13 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           }
 
           @Override
-          public void onProgressUpdate(EasyTaskDialog easyTaskDialog, String... strings) {
-            easyTaskDialog.setMsg(strings[0]);
+          public void onFail(int i, String s, String s1) {
+
+          }
+
+          @Override
+          public void onProgressUpdate(EasyTaskProgressBar easyTaskProgressBar, String... strings) {
+            easyTaskProgressBar.setMsg(strings[0]);
           }
         });
   }
