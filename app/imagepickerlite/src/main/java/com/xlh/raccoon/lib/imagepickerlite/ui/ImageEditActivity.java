@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,12 +28,7 @@ import com.xlh.raccoon.lib.imagepickerlite.Utils;
 import com.xlh.raccoon.lib.imagepickerlite.view.CropImageView;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Date;
-import java.util.List;
-
-import top.zibin.luban.Luban;
 
 public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
@@ -99,12 +93,12 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           @Override
           public void onFinish(Bitmap bitmap) {
             cropImageView.setBitmap(bitmap);
-            cropImageView.setRatio(imageOptions.isFreeCrop());
+            cropImageView.setRatio(imageOptions.isCropSquare());
           }
 
           @Override
           public void onFail(int i, String s, String s1) {
-
+            Toast.makeText(ImageEditActivity.this, s + "  " + s1, Toast.LENGTH_SHORT).show();
           }
 
           @Override
@@ -155,7 +149,7 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
 
           @Override
           public void onFail(int i, String s, String s1) {
-
+            Toast.makeText(ImageEditActivity.this, s + "  " + s1, Toast.LENGTH_SHORT).show();
           }
 
           @Override
@@ -182,24 +176,7 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           @Override
           public File onWork(EasyTask<Void, File> easyTask, Void... voids) {
             Bitmap bitmap = cropImageView.getCropBitmap();
-            String cropFilePath = saveBitmap(bitmap, imageOptions.getSavePath(), new Date().getTime() + ".png");
-            if (imageOptions.getMaxWidth() != 0) {
-              bitmap = Utils.resizePictureFromFile(cropFilePath, imageOptions.getMaxWidth(), imageOptions.getMaxHeight());
-              new File(cropFilePath).delete();
-              cropFilePath = saveBitmap(bitmap, imageOptions.getSavePath(), new Date().getTime() + ".png");
-            }
-            easyTask.updateProgress("压缩图片中...");
-            try {
-              List<File> fileList = Luban.with(ImageEditActivity.this).setTargetDir(imageOptions.getSavePath()).load(cropFilePath).get();
-              File file = fileList.get(0);
-              if (!TextUtils.equals(cropFilePath, file.getAbsolutePath())) {
-                new File(cropFilePath).delete();
-              }
-              return file;
-            } catch (IOException e) {
-              e.printStackTrace();
-              return null;
-            }
+            return Utils.saveBitmap(bitmap, imageOptions.getSavePath(), new Date().getTime() + ".jpg");
           }
 
           @Override
@@ -214,7 +191,7 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
 
           @Override
           public void onFail(int i, String s, String s1) {
-
+            Toast.makeText(ImageEditActivity.this, s + "  " + s1, Toast.LENGTH_SHORT).show();
           }
 
           @Override
@@ -222,21 +199,6 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
             easyTaskProgressBar.setMsg(strings[0]);
           }
         });
-  }
-
-  public static String saveBitmap(Bitmap bitmap, String path, String name) {
-    new File(path).mkdirs();
-    File file = new File(path, name);
-    try {
-      FileOutputStream out = new FileOutputStream(file);
-      bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-      out.flush();
-      out.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-    return file.getAbsolutePath();
   }
 
   @Override

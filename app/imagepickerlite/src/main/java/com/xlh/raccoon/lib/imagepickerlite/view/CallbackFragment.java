@@ -10,8 +10,6 @@ import com.xlh.raccoon.lib.imagepickerlite.ImagePicker;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePickerCallback;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePickerLite;
 
-import java.io.File;
-
 public class CallbackFragment extends Fragment {
 
   public static final String TAG = "CallbackFragment";

@@ -30,9 +30,7 @@ public class MainActivity extends AppCompatActivity {
               @Override
               public void onPicked(ImagePicker imagePicker, Uri uri) {
                 ImageOptions imageOptions = new ImageOptions(MainActivity.this);
-                imageOptions.setMaxWidth(320);
-                imageOptions.setMaxHeight(320);
-                imageOptions.setFreeCrop(true);
+                imageOptions.setCropSquare(true);
                 imagePicker.edit(MainActivity.this, uri, imageOptions);
               }
 
