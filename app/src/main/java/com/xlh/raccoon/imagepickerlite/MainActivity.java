@@ -27,10 +27,13 @@ public class MainActivity extends AppCompatActivity {
       public void onClick(View v) {
         ImagePickerLite.builder()
             .pick(MainActivity.this, new ImagePickerCallback() {
+              //成功选取图片的回调
               @Override
               public void onPicked(ImagePicker imagePicker, Uri uri) {
+                //创建裁剪配置
                 ImageOptions imageOptions = new ImageOptions(MainActivity.this);
-                imageOptions.setCropSquare(true);
+                imageOptions.setCropSquare(true);//裁剪框是否固定为正方形
+                //进入裁剪界面
                 imagePicker.edit(MainActivity.this, uri, imageOptions);
               }
 
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
               }
 
+              //成功裁剪图片的回调
               @Override
               public void onEdited(String filePath) {
                 imageView.setImageBitmap(BitmapFactory.decodeFile(filePath));
