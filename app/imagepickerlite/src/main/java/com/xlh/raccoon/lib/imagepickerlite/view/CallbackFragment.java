@@ -3,12 +3,19 @@ package com.xlh.raccoon.lib.imagepickerlite.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.xlh.raccoon.lib.easyasynctask.EasyAsyncTask;
+import com.xlh.raccoon.lib.easyasynctask.EasyCallback;
+import com.xlh.raccoon.lib.easyasynctask.EasyTask;
+import com.xlh.raccoon.lib.easyasynctask.EasyTaskProgressBar;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePicker;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePickerCallback;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePickerLite;
+
+import java.io.File;
 
 public class CallbackFragment extends Fragment {
 
@@ -30,10 +37,45 @@ public class CallbackFragment extends Fragment {
     this.imagePickerCallback = imagePicker.getImagePickerCallback();
   }
 
+  private void compress(final String filepath) {
+    EasyAsyncTask.builder(getContext(), String.class, File.class)
+        .addListener(new EasyCallback<String, File>() {
+          @Override
+          public void onInt(EasyTask<String, File> easyTask) {
+            easyTask.execute(filepath);
+          }
+
+          @Override
+          public void onStart(EasyTaskProgressBar easyTaskProgressBar) {
+            easyTaskProgressBar.setMsg("压缩图片中...");
+            easyTaskProgressBar.show();
+          }
+
+          @Override
+          public File onWork(EasyTask<String, File> easyTask, String... files) {
+            return CallbackFragment.this.imagePickerCallback.onCompress(new File(files[0]));
+          }
+
+          @Override
+          public void onFinish(File file) {
+            imagePickerCallback.onCropFinish(file);
+          }
+
+          @Override
+          public void onFail(int i, String s, String s1) {
+            Toast.makeText(getContext(), s + "   " + s1, Toast.LENGTH_SHORT).show();
+          }
+
+          @Override
+          public void onProgressUpdate(EasyTaskProgressBar easyTaskProgressBar, String... strings) {
+
+          }
+        });
+  }
+
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    System.out.println("xxxxxxx" + requestCode);
     if (imagePickerCallback != null) {
       switch (requestCode) {
         case ImagePickerLite.ENTRY_GALLERY_REQUEST:
@@ -49,9 +91,9 @@ public class CallbackFragment extends Fragment {
           if (resultCode == Activity.RESULT_OK) {
             if (data != null) {
               String filePath = data.getStringExtra(ImagePickerLite.EDITED_IMAGE_PATH);
-              imagePickerCallback.onEdited(filePath);
+              compress(filePath);
             } else {
-              imagePickerCallback.onEditError("intent is null");
+              imagePickerCallback.onCropError("intent is null");
             }
           }
           break;

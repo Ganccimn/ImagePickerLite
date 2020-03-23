@@ -3,6 +3,7 @@ package com.xlh.raccoon.imagepickerlite;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,6 +13,8 @@ import com.xlh.raccoon.lib.imagepickerlite.ImageOptions;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePicker;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePickerCallback;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePickerLite;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,14 +45,23 @@ public class MainActivity extends AppCompatActivity {
 
               }
 
-              //成功裁剪图片的回调
+              //图片裁剪好后的压缩回调，此处异步
+              //先调用 onCompress() 再调用 onCropFinish()
               @Override
-              public void onEdited(String filePath) {
-                imageView.setImageBitmap(BitmapFactory.decodeFile(filePath));
+              public File onCompress(File file) {
+                //模拟压缩耗时
+                SystemClock.sleep(4000);
+                return file;
+              }
+
+              //图片裁剪好后的最终回调
+              @Override
+              public void onCropFinish(File file) {
+                imageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
               }
 
               @Override
-              public void onEditError(String msg) {
+              public void onCropError(String msg) {
 
               }
             });

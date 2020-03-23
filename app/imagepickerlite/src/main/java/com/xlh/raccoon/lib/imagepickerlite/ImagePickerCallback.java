@@ -2,12 +2,16 @@ package com.xlh.raccoon.lib.imagepickerlite;
 
 import android.net.Uri;
 
+import java.io.File;
+
 public interface ImagePickerCallback {
   void onPicked(ImagePicker imagePicker, Uri uri);
 
   void onPickError(ImagePicker imagePicker, String msg);
 
-  void onEdited(String filePath);
+  File onCompress(File file);
 
-  void onEditError(String msg);
+  void onCropFinish(File file);
+
+  void onCropError(String msg);
 }
