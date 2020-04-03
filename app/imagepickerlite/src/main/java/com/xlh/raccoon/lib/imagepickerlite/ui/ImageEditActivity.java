@@ -21,6 +21,7 @@ import com.xlh.raccoon.lib.easyasynctask.EasyAsyncTask;
 import com.xlh.raccoon.lib.easyasynctask.EasyCallback;
 import com.xlh.raccoon.lib.easyasynctask.EasyTask;
 import com.xlh.raccoon.lib.easyasynctask.EasyTaskProgressBar;
+import com.xlh.raccoon.lib.easyasynctask.ForceThrowException;
 import com.xlh.raccoon.lib.imagepickerlite.ImageOptions;
 import com.xlh.raccoon.lib.imagepickerlite.ImagePickerLite;
 import com.xlh.raccoon.lib.imagepickerlite.R;
@@ -85,7 +86,7 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
             try {
               bitmap = Utils.uriToBitmap(ImageEditActivity.this, uris[0]);
             } catch (Exception e) {
-              e.printStackTrace();
+              throw new ForceThrowException(e.getMessage());
             }
             return bitmap;
           }
@@ -176,7 +177,7 @@ public class ImageEditActivity extends AppCompatActivity implements Toolbar.OnMe
           @Override
           public File onWork(EasyTask<Void, File> easyTask, Void... voids) {
             Bitmap bitmap = cropImageView.getCropBitmap();
-            return Utils.saveBitmap(bitmap, imageOptions.getSavePath(), new Date().getTime() + ".jpg");
+            return Utils.saveBitmap(bitmap, new File(imageOptions.getSavePath(), new Date().getTime() + ".jpg"), Bitmap.CompressFormat.JPEG, 80);
           }
 
           @Override
