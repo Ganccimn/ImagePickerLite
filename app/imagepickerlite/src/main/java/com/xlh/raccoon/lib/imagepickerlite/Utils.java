@@ -8,6 +8,7 @@ import android.os.ParcelFileDescriptor;
 
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 /**
@@ -57,6 +58,24 @@ public class Utils {
     options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
     options.inJustDecodeBounds = false;
     return BitmapFactory.decodeFile(path, options);
+  }
+
+  public static Bitmap resizePictureFromUri(Context context, Uri uri, int reqWidth, int reqHeight) {
+    final BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    ParcelFileDescriptor parcelFileDescriptor;
+    FileDescriptor fileDescriptor;
+    try {
+      parcelFileDescriptor = context.getContentResolver().openFileDescriptor(uri, "r");
+      fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return null;
+    }
+    BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
+    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+    options.inJustDecodeBounds = false;
+    return BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
   }
 
   // the algorithm for calculate the inSampleSize;

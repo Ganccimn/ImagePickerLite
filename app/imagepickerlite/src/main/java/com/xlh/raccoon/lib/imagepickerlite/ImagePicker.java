@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.xlh.raccoon.lib.imagepickerlite.ui.ImageEditActivity;
+import com.xlh.raccoon.lib.imagepickerlite.ui.ImageGalleryActivity;
 import com.xlh.raccoon.lib.imagepickerlite.view.CallbackFragment;
 
 public class ImagePicker {
@@ -53,7 +54,17 @@ public class ImagePicker {
     this.imagePickerCallback = imagePickerCallback;
     CallbackFragment callbackFragment = init(activity);
     callbackFragment.setImagePicker(this);
-    callbackFragment.startActivityForResult(buildSafIntent(), ImagePickerLite.ENTRY_GALLERY_REQUEST);
+    try {
+      callbackFragment.startActivityForResult(buildSafIntent(), ImagePickerLite.ENTRY_GALLERY_REQUEST);
+    } catch (Exception e) {
+      //小米手机不支持SAF存储框架
+      //调用自带的图片选取
+      e.printStackTrace();
+      callbackFragment.startActivityForResult(
+          new Intent(callbackFragment.getContext(), ImageGalleryActivity.class),
+          ImagePickerLite.ENTRY_GALLERY_REQUEST
+      );
+    }
   }
 
   public void edit(FragmentActivity activity, Uri uri, ImageOptions imageOptions) {
