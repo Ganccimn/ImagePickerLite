@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 
 /**
  * Created by GCM on 2018/2/7.
@@ -58,6 +59,15 @@ public class Utils {
     options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
     options.inJustDecodeBounds = false;
     return BitmapFactory.decodeFile(path, options);
+  }
+
+  public static Bitmap resizePictureFromSteam(InputStream inputStream, int reqWidth, int reqHeight) {
+    final BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeStream(inputStream, null, options);
+    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+    options.inJustDecodeBounds = false;
+    return BitmapFactory.decodeStream(inputStream, null, options);
   }
 
   public static Bitmap resizePictureFromUri(Context context, Uri uri, int reqWidth, int reqHeight) {
