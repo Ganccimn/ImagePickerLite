@@ -39,14 +39,22 @@ ImagePickerLite.builder()
 
               }
 
-              //成功裁剪图片的回调
+              //图片裁剪好后的压缩回调，此处异步
+              //先调用 onCompress() 再调用 onCropFinish()
               @Override
-              public void onEdited(String filePath) {
-                imageView.setImageBitmap(BitmapFactory.decodeFile(filePath));
+              public File onCompress(File file) {
+                Bitmap bitmap = Utils.resizePictureFromFile(file.getAbsolutePath(), 300, 300);
+                return Utils.saveBitmap(bitmap, file, Bitmap.CompressFormat.JPEG, 80);
+              }
+
+              //图片裁剪好后的最终回调
+              @Override
+              public void onCropFinish(File file) {
+                imageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
               }
 
               @Override
-              public void onEditError(String msg) {
+              public void onCropError(String msg) {
 
               }
             });
